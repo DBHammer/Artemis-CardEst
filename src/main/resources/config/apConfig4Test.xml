@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<testCaseGenerator>
+	<!--是否生成新的schema,配置true为重新生成，配置false为读取已有的-->
+	<isGeneSchema> true </isGeneSchema>
+	<!--schema文件地址-->
+	<schemaFile> .//schema4Test//expressions.txt </schemaFile>
+
+	<!--是否生成新的数据-->
+	<isGeneData> true </isGeneData>
+	<!--数据生成的节点数量-->
+	<nodeNum> 1 </nodeNum>
+	<threadNumPerNode> 1 </threadNumPerNode>
+	<!--是否将数据导入数据库-->
+	<isLoadData> false </isLoadData>
+
+	<!--是否生成新的查询-->
+	<isGeneQuery> false </isGeneQuery>
+	<!--生成Query的数量-->
+	<queryNumPerSchema> 1 </queryNumPerSchema>
+	<!--每个Query中涉及表的数量-->
+	<tableNumPerQuery> 4 </tableNumPerQuery>
+
+	<!--算子结果计算时用到的线程数-->
+	<solverThread> 400 </solverThread>
+
+	<!--是否保存所有的数据、query、schema生成语句等，设置为true全都保存，设置为false为有错误保存无错误不保存-->
+	<saveArchive> true </saveArchive>
+
+	<!--数据库配置-->
+	<testDatabaseName> Artemis </testDatabaseName>
+
+	<!--支持的数据库名称，目前可写tidb、sqlite、mysql、gaussdb等-->
+
+	<!--数据库为oceanbase时，由于ob不支持远程导入数据，需要将生成数据传输到ob的root sever，需要配置sever信息-->
+<!--	<databaseConfig>-->
+<!--		<databaseBrand> tidb </databaseBrand>-->
+<!--		<databaseIP> 172.22.13.86 </databaseIP>-->
+<!--		<databasePort> 4000 </databasePort>-->
+<!--		<dbUsername> root </dbUsername>-->
+<!--		<dbPassword> </dbPassword>-->
+<!--	</databaseConfig>-->
+
+	<!-- <databaseConfig>
+		<databaseBrand> gaussdb </databaseBrand>
+		<databaseIP> 127.0.0.1 </databaseIP>
+		<databasePort> 15432 </databasePort>
+		<dbUsername> postgres </dbUsername>
+		<dbPassword> 0peng@uss </dbPassword>
+		<serverHost> 172.16.194.51 </serverHost>
+		<serverPort> 22 </serverPort>
+		<serverUser> root </serverUser>
+		<serverPassword> Dbhammer2022 </serverPassword>
+		<uploadDir> /root/obdata </uploadDir>
+	</databaseConfig> -->
+
+		<databaseConfig>
+		<databaseBrand> mysql </databaseBrand>
+		<databaseIP> 127.0.0.1 </databaseIP>
+		<databasePort> 3307 </databasePort>
+		<dbUsername> root </dbUsername>
+		<dbPassword> jw </dbPassword>
+	</databaseConfig>
+
+
+	<!--是否进行结果自计算：挑选最终结果符合要求的查询，如cardLowerBound设置为5则表示挑选最终结果>=5的查询，存入targetQuery.txt中-->
+	<isCalcuate> true </isCalcuate>
+	<cardLowerBound> 5 </cardLowerBound>
+
+	<!--进行何种评估：1.正确性验证 2.执行时间对比 3.连接顺序评估-->
+	<!--是否只生成查询：只生成需要的查询而不进行正确性验证、执行时间对比和连接连接顺序评估-->
+	<generateOnly> true </generateOnly>
+	<!--是否验证结果正确性-->
+	<correctnessVarity> false </correctnessVarity>
+	<!--是否对比执行时间（对两个数据库的执行时间进行对比）-->
+	<executeTimeCompare> false </executeTimeCompare>
+	<!--Join Order评估的配置-->
+	<joinOrderEvaluatioin>
+		<!--（只针对生成新的查询时）是否进行连接顺序重排评估：目前只针对星型查询，根据中间结果进行连接顺序重排-->
+		<cardOptimialJoinOrder> false </cardOptimialJoinOrder>
+		<!--是否进行连接顺序评估-->
+		<joinOrderRank> false </joinOrderRank>
+	</joinOrderEvaluatioin>
+
+
+	<!--以下为详细的模式、负载配置-->
+	<drawQuery> false </drawQuery>
+	<!--聚集运算中sum、avg、count、max和min的概率-->
+	<sumProbability> 0.3 </sumProbability>
+	<avgProbability> 0.0 </avgProbability>
+	<!--最好不要设置avg，因为avg存在小数除不尽的情况，比如/3,可能和数据库不一致-->
+	<countProbability> 0.3 </countProbability>
+	<maxProbability> 0.2 </maxProbability>
+	<minProbability> 0.2 </minProbability>
+	<!--生成的Query中Filter表达式中属性配置-->
+	<pureColumnProbability> 0.4 </pureColumnProbability>
+	<singleColumnProbability> 0.3 </singleColumnProbability>
+	<multiColumnProbability> 0.3 </multiColumnProbability>
+
+	<subQueryProbability> 1.0 </subQueryProbability>
+
+	<!--QueryGraph形状的分布，包括chain、star、tree等-->
+	<!--是否随机生成查询图的形状，若为false则可自定义各形状的生成比例-->
+	<randomGeneQueryGraphShape> false </randomGeneQueryGraphShape>
+	<queryGraphShape2OccurProbability>
+		<item>
+			<queryGraphShape> chain </queryGraphShape>
+			<probability> 1.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> star </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> tree </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> cycle </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> cyclic </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> clique </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<queryGraphShape> grid </queryGraphShape>
+			<probability> 0.0 </probability>
+		</item>
+	</queryGraphShape2OccurProbability>
+
+	<!--schema中表的数量-->
+	<tableNumHistogram>
+		<HistogramItem>
+			<minValue> 1 </minValue>
+			<maxValue> 1 </maxValue>
+			<ratio>  0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 5 </minValue>
+			<maxValue> 5 </maxValue>
+			<ratio>  1.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 8 </minValue>
+			<maxValue> 8 </maxValue>
+			<ratio>  0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 10 </minValue>
+			<maxValue> 10 </maxValue>
+			<ratio>  0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 15 </minValue>
+			<maxValue> 15 </maxValue>
+			<ratio>  0.0 </ratio>
+		</HistogramItem>
+	</tableNumHistogram>
+
+
+	<!--schema中表的大小-->
+	<tableSizeHistogram>
+		<HistogramItem>
+			<minValue> 10 </minValue>
+			<maxValue> 20 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 100 </minValue>
+			<maxValue> 500 </maxValue>
+			<ratio> 1.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 10000 </minValue>
+			<maxValue> 30000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 5000 </minValue>
+			<maxValue> 5000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 10000000 </minValue>
+			<maxValue> 10000000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 10001 </minValue>
+			<maxValue> 30000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 300000 </minValue>
+			<maxValue> 500000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 100000000 </minValue>
+			<maxValue> 100000000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 1000000 </minValue>
+			<maxValue> 3000000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 100000 </minValue>
+			<maxValue> 300000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 700000 </minValue>
+			<maxValue> 1000000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 1000000 </minValue>
+			<maxValue> 3000000 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+	</tableSizeHistogram>
+
+	<!--schema中普通属性列（非主键和外键）的数量-->
+	<columnNumHistogram>
+		<HistogramItem>
+			<minValue> 8 </minValue>
+			<maxValue> 8 </maxValue>
+			<ratio> 1.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 15 </minValue>
+			<maxValue> 20 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 15 </minValue>
+			<maxValue> 25 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+	</columnNumHistogram>
+
+
+	<!--数据生成的分布，均匀分布、zipfian分布,高斯分布可由zipfian分布调整skewness实现-->
+	<!--若要均匀分布，则配置uniformProbability为1.0；若要zipfian分布，则配置zipfianProbability为1.0-->
+	<!--zipfian分布的倾斜度在下面zipSkewness中配置-->
+	<dataDistributionProbability>
+		<item>
+			<dataType> int </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<uniformProbability> 0.0 </uniformProbability>
+			<zipfianProbability> 1.0 </zipfianProbability>
+		</item>
+		<item>
+			<dataType> float </dataType>
+			<!--<probability> 0.05 </probability>-->
+			<uniformProbability> 1.0 </uniformProbability>
+			<zipfianProbability> 0 </zipfianProbability>
+		</item>
+		<item>
+			<dataType> double </dataType>
+			<!--<probability> 0.1 </probability>-->
+			<uniformProbability> 1.0 </uniformProbability>
+			<zipfianProbability> 0 </zipfianProbability>
+		</item>
+		<item>
+			<dataType> decimal </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<uniformProbability> 1.0 </uniformProbability>
+			<zipfianProbability> 0 </zipfianProbability>
+		</item>
+		<item>
+			<dataType> varchar </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<uniformProbability> 1.0 </uniformProbability>
+			<zipfianProbability> 0 </zipfianProbability>
+		</item>
+		<item>
+			<dataType> timestamp </dataType>
+			<!--<probability> 0.1 </probability>-->
+			<uniformProbability> 1.0 </uniformProbability>
+			<zipfianProbability> 0 </zipfianProbability>
+		</item>
+
+	</dataDistributionProbability>
+
+	<!--如果是zipfian分布，需要配置倾斜度 -->
+	<zipSkewness> 1.0 </zipSkewness>
+
+	<!--数据类型的概率，包括int、float、double等-->
+	<dataType2OccurProbability>
+		<item>
+			<dataType> int </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<probability> 0.4 </probability>
+		</item>
+		<item>
+			<dataType> float </dataType>
+			<!--<probability> 0.05 </probability>-->
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<dataType> double </dataType>
+			<!--<probability> 0.1 </probability>-->
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<dataType> decimal </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<probability> 0.3 </probability>
+		</item>
+		<item>
+			<dataType> varchar </dataType>
+			<!--<probability> 0.2 </probability>-->
+			<probability> 0.3 </probability>
+		</item>
+		<item>
+			<dataType> timestamp </dataType>
+			<!--<probability> 0.1 </probability>-->
+			<probability> 0.0 </probability>
+		</item>
+		<item>
+			<dataType> bool </dataType>
+			<!--<probability> 0.05 </probability>-->
+			<probability> 0.0 </probability>
+		</item>
+	</dataType2OccurProbability>
+
+
+	<maxP4Decimal> 25 </maxP4Decimal>
+	<maxS4Decimal> 5 </maxS4Decimal>
+
+	<varcharLengthHistogram>
+		<HistogramItem>
+			<minValue> 30 </minValue>
+			<maxValue> 50 </maxValue>
+			<ratio> 1.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 51 </minValue>
+			<maxValue> 100 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 101 </minValue>
+			<maxValue> 200 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 201 </minValue>
+			<maxValue> 500 </maxValue>
+			<ratio> 0.0 </ratio>
+		</HistogramItem>
+	</varcharLengthHistogram>
+
+
+
+	<seedStringNum> 1000 </seedStringNum>
+
+
+	<supportIndexDataTypes>
+		<dataType> int </dataType>
+		<dataType> float </dataType>
+		<dataType> double </dataType>
+		<dataType> decimal </dataType>
+		<dataType> timestamp </dataType>
+		<dataType> varchar </dataType>
+	</supportIndexDataTypes>
+
+
+	<dataType2CreateIndexProbability>
+		<item>
+			<dataType> int </dataType>
+			<probability> 0.3 </probability>
+		</item>
+		<item>
+			<dataType> float </dataType>
+			<probability> 0.05 </probability>
+		</item>
+		<item>
+			<dataType> double </dataType>
+			<probability> 0.05 </probability>
+		</item>
+		<item>
+			<dataType> decimal </dataType>
+			<probability> 0.05 </probability>
+		</item>
+		<item>
+			<dataType> varchar </dataType>
+			<probability> 0.2 </probability>
+		</item>
+		<item>
+			<dataType> timestamp </dataType>
+			<probability> 0.2 </probability>
+		</item>
+	</dataType2CreateIndexProbability>
+
+
+	<multiColumnIndexNumHistogram>
+		<HistogramItem>
+			<minValue> 2 </minValue>
+			<maxValue> 3 </maxValue>
+			<ratio> 0.1 </ratio>
+		</HistogramItem>
+		<HistogramItem>
+			<minValue> 4 </minValue>
+			<maxValue> 5 </maxValue>
+			<ratio> 0.05 </ratio>
+		</HistogramItem>
+	</multiColumnIndexNumHistogram>
+
+	<indexMaxColumnNum> 4 </indexMaxColumnNum>
+
+	<isCreateIndex4ForeignKey> true </isCreateIndex4ForeignKey>
+
+	<dataoutputDir> .//data4Test </dataoutputDir>
+
+	<queryoutputDir> .//query4Test </queryoutputDir>
+
+	<schemaoutputDir> .//schema4Test </schemaoutputDir>
+
+	<reportoutputDir> .//report </reportoutputDir>
+	<calculateResultOutputDir> .//calculateResult </calculateResultOutputDir>
+	<executeResultOutputDir> .//executeResult </executeResultOutputDir>
+	<executeTimeOutputDir> .//executeTime</executeTimeOutputDir>
+
+	<joinOrderRankOutputDir> .//joinOrderRank </joinOrderRankOutputDir>
+
+	<generatedExactCardinality> .//ExactCardinalityGeneration </generatedExactCardinality>
+
+	<encodeType> utf-8 </encodeType>
+
+
+	<maxTableNum> 5 </maxTableNum>
+
+	<maxGroupNum> 2 </maxGroupNum>
+
+	<maxOrderNum> 2 </maxOrderNum>
+
+	<maxAggreNum> 3 </maxAggreNum>
+
+</testCaseGenerator>
